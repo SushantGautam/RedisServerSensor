@@ -1,1 +1,1 @@
-web: daphne WebVisualization.asgi:application --port 8000 --bind 127.0.0.1
+web: daphne WebVisualization.asgi:application --port $PORT --bind 0.0.0.0
