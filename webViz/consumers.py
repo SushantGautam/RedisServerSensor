@@ -40,6 +40,7 @@ class ChatConsumer(WebsocketConsumer):
         message = text_data_json['message']
         boothname = text_data_json['boothname']
 
+
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,

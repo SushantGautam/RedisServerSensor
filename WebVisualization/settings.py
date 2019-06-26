@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 ]
 
 # REDIS_URL = os.environ['REDIS_URL']
-REDIS_URL = "redis://h:p3dcad43b4d9ddec36846a8b1c50a1434fd96a86726ad898671b0b25ce553c08c@ec2-63-32-83-204.eu-west-1.compute.amazonaws.com:19019"
+REDIS_URL = "redis://h:pb7db417bc4315578831fd6ee5f9728ef080116d100f144e403535878eb20a914@ec2-35-175-40-87.compute-1.amazonaws.com:29199"
 REDIS_CHAN = 'chat'
 
 CHANNEL_LAYERS = {
