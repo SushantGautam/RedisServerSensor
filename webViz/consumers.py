@@ -1,5 +1,4 @@
 import json
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -38,9 +37,12 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data, ):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        boothname = text_data_json['boothname']
+        text_data_dict = json.loads(text_data)
+        print(text_data_dict)
+        message = text_data_dict['message']
+        print(message)
+        boothname = text_data_dict['boothname']
+        print(boothname)
 
 
         # Send message to room group
@@ -61,7 +63,7 @@ class ChatConsumer(WebsocketConsumer):
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
-            'message': message,
-            'boothname': boothname,
+            'temp': message,
+            'hum': boothname,
             'ifsuccess': 'success',
         }))
