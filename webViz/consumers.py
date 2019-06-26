@@ -2,8 +2,10 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
+@xframe_options_exempt
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = "BoothMasterSocket"
