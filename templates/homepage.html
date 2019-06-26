@@ -1,11 +1,18 @@
- <script>
+Welcome to  RTEndpoint<br>
+Coded by sushant.info.np <br>
+See console log for details
+
+
+
+<script>
+
         var urlRequestTimeout = setTimeout(function () {
             console.log("Failed to load resources");
         }, 8000);
 
         var roomName = "Hancy";
         var chatSocket = new WebSocket(
-            'ws://rt-sensor-sushant.cybersanchar.com/RTEndpoint/');
+            'ws://'+ window.location.hostname+ '/RTEndpoint/');
         chatSocket.onmessage = function (e) {
             var data = JSON.parse(e.data);
             var message = data['message'];
