@@ -1,0 +1,80 @@
+ <script>
+        var urlRequestTimeout = setTimeout(function () {
+            console.log("Failed to load resources");
+        }, 8000);
+
+        var roomName = "Hancy";
+        var chatSocket = new WebSocket(
+            'ws://rt-sensor-sushant.cybersanchar.com/RTEndpoint/');
+        chatSocket.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            var message = data['message'];
+            var boothname = data['boothname'];
+            if (data['ifsuccess'] === 'success') {
+
+            }
+            console.log(e.data);
+            // {#document.querySelector('#chat-log').value += (message + '\n');#}
+        };
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+        if (document.querySelector('#chat-message-input')) {
+            document.querySelector('#chat-message-input').onkeyup = function (e) {
+                if (e.keyCode === 13) {  // enter, return
+                    document.querySelector('#chat-message-submit').click();
+                }
+            };
+            document.querySelector('#chat-message-submit').onclick = function (e) {
+                var messageInputDom = document.querySelector('#chat-message-input');
+                var message = messageInputDom.value;
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'boothname': 'Booth1',
+                }));
+                messageInputDom.value = '';
+            };
+        }
+        function haltSession(boothname) {
+            var r = confirm("Are you sure to stop session on " + boothname + " ?");
+            if (r === true) {
+                urltocall = "/halt/" + boothname;
+                $.ajax({
+                    url: urltocall,
+                    dataType: "text",
+                    method: "GET",
+                    success: function (response) {
+                        console.log(response);
+                        clearTimeout(urlRequestTimeout);
+                        if (response === "Halted") {
+                            chatSocket.send(JSON.stringify({
+                                'message': "halted",
+                                'boothname': boothname,
+                            }));
+                            reflectChanges('#' + boothname, "Halted", "error");
+                        } else {
+                            reflectChanges('#' + boothname, response, "error");
+                        }
+                    }
+                });
+            }
+        }
+        function reflectChanges(BoothName, Message, Type) {
+            console.log(BoothName);
+            if (Type === "success") {
+                $(BoothName + "_image").attr("src", "/static/images/status/success.png");
+            } else {
+                $(BoothName + "_image").attr("src", "/static/images/status/error.png");
+                $(BoothName + '_username').css({"background-color": "red"}).text(Message);
+            }
+        }
+        function DisplayResult() {
+            var r = confirm("Are you sure to end the election? All booths will be disconnected after this action!");
+            if (r === true) {
+                var codeword = prompt("Please enter the code.",);
+                if (codeword === "pulchowk") {
+                    location.href = "/election_result";
+                }
+            }
+        }
+    </script>
