@@ -1,2 +1,1 @@
-web: gunicorn WebVisualization.wsgi:application  -k flask_sockets.worker --log-file -
-
+web: daphne django_channels_heroku.asgi:application --port 80 --bind 0.0.0.0
