@@ -12,7 +12,7 @@ See console log for details
 
         var roomName = "Hancy";
         var chatSocket = new WebSocket(
-            'ws://'+ window.location.hostname+ '/RTEndpoint/');
+            'ws://'+ window.location.hostname+':'+window.location.port+ '/RTEndpoint/');
         chatSocket.onmessage = function (e) {
             var data = JSON.parse(e.data);
             var message = data['message'];
