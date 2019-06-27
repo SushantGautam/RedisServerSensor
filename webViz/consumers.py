@@ -1,7 +1,10 @@
 import json
+
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.views.decorators.clickjacking import xframe_options_exempt
+
+from webViz.reciever import decrypteddata
 
 
 @xframe_options_exempt
@@ -37,13 +40,12 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data, ):
-        text_data_dict = json.loads(text_data)
-        print(text_data_dict)
-        message = text_data_dict['message']
-        print(message)
-        boothname = text_data_dict['boothname']
-        print(boothname)
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+        boothname = text_data_json['boothname']
 
+        message = decrypteddata(message)
+        print(message)
 
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
