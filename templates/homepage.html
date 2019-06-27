@@ -3,143 +3,157 @@ Coded by sushant.info.np <br>
 See console log for details
 
 
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+      crossorigin=""/>
+
+<script src="https://unpkg.com/@joergdietrich/leaflet.terminator"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
+      rel='stylesheet'/>
 
 
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-            crossorigin=""></script>
-
-    <script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>
-    <script src="https://unpkg.com/@joergdietrich/leaflet.terminator"></script>
-    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
-          rel='stylesheet'/>
-
-
-
-
-    <div id="container" style="position:relative;display: flex;">
-        <div id="map_container" style="height:100%;display: inline-block;">
-            <div id="map" style="width: 70vw; height: 70vh;"></div>
-        </div>
+<div id="container" style="position:relative;display: flex;">
+    <div id="map_container" style="height:100%;display: inline-block;">
+        <div id="map" style="width: 70vw; height: 70vh;"></div>
     </div>
-
-
-    <script>
-        // map declaration
-        var tileLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            id: 'mapbox.streets'
-        });
-        var map = L.map('map', {
-            zoomControl: true
-        }).setView([27.68139991, 85.32351494], 17);
-        map.addLayer(tileLayer);
-        marker=L.marker([27.68139991, 85.32351494]).bindPopup(
-            "<b>Time: </b>"+new Date("2019-06-26T15:09:00Z") + " <br>" +
-            "<b>Speed: </b>" +"0" + " Km/Hr<br>" +
-            "<b>Temperature(°C): </b>" +"23.188"+ " <br>" +
-            "<b>Humidity: </b>" + "70.0"+" <br>" +
-            "<b>Solar Radiation: </b>" + "0.0"+" <br>" +
-            "<b>PM2.5: </b>" +"26.7 µg/m³" +" <br>" +
-            "<b>CO2: </b>"  +"0665" +" <br>" +
-            "<b>VOCs: </b>" +"0.640"+ " <br>",
-            {keepInView: "True"}
-        ).addTo(map);
-        marker.openPopup();
-
-
-    </script>
-
-
+</div>
 
 
 <script>
+    // map declaration
+    var tileLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        id: 'mapbox.streets'
+    });
+    var map = L.map('map', {
+        zoomControl: true
+    }).setView([27.68139991, 85.32351494], 17);
 
-        var urlRequestTimeout = setTimeout(function () {
-            console.log("Failed to load resources");
-        }, 8000);
-
-        var roomName = "Hancy";
-        var chatSocket = new WebSocket(
-            'ws://'+ window.location.hostname+':'+window.location.port+ '/RTEndpoint/');
-        chatSocket.onmessage = function (e) {
-            var data = JSON.parse(e.data);
-            var message = data['message'];
-            var boothname = data['boothname'];
-            if (data['ifsuccess'] === 'success') {
-
-                // update the marker in the leafletjs map
-                marker._popup.setContent("");
-                marker.setLatLng([lat, lng]).update();
+    map.addLayer(tileLayer);
 
 
-            }
-            console.log(e.data);
-            // {#document.querySelector('#chat-log').value += (message + '\n');#}
-        };
-        chatSocket.onclose = function (e) {
-            console.error('Chat socket closed unexpectedly');
-        };
-        if (document.querySelector('#chat-message-input')) {
-            document.querySelector('#chat-message-input').onkeyup = function (e) {
-                if (e.keyCode === 13) {  // enter, return
-                    document.querySelector('#chat-message-submit').click();
-                }
-            };
-            document.querySelector('#chat-message-submit').onclick = function (e) {
-                var messageInputDom = document.querySelector('#chat-message-input');
-                var message = messageInputDom.value;
-                chatSocket.send(JSON.stringify({
-                    'message': message,
-                    'boothname': 'Booth1',
-                }));
-                messageInputDom.value = '';
-            };
+    markerx = L.marker([27.68139991, 85.32351494]).bindTooltip(
+        "<b>Time: </b>" + new Date("2019-06-26T15:09:00Z") + " <br>" +
+        "<b>Speed: </b>" + "0" + " Km/Hr<br>" +
+        "<b>Temperature(°C): </b>" + "23.188" + " <br>" +
+        "<b>Humidity: </b>" + "70.0" + " <br>" +
+        "<b>Solar Radiation: </b>" + "0.0" + " <br>" +
+        "<b>PM2.5: </b>" + "26.7 µg/m³" + " <br>" +
+        "<b>CO2: </b>" + "0665" + " <br>" +
+        "<b>VOCs: </b>" + "0.640" + " <br>",
+        {keepInView: "True"}
+    ).addTo(map);
+
+    markerx.openTooltip();
+
+
+    var urlRequestTimeout = setTimeout(function () {
+        console.log("Failed to load resources");
+    }, 8000);
+
+    var roomName = "Hancy";
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.hostname + ':' + window.location.port + '/RTEndpoint/');
+    chatSocket.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var boothname = data['boothname'];
+        if (data['ifsuccess'] === 'success') {
+            console.log(data.lat, data.lon);
+            console.log(data);
+
+
+            {#map.closePopup();#}
+            markerx.unbindPopup();
+
+            markerx.setLatLng([data.lat + 0.27240141, data.lon + 0.12922093999999]).update();
+            markerx.setTooltipContent(
+                "<b>Time: </b>" + new Date("2019-06-26T15:09:00Z") + " <br>" +
+                "<b>Speed: </b>" + "0" + " Km/Hr<br>" +
+                "<b>Temperature(°C): </b>" + data.temp + " <br>" +
+                "<b>Humidity: </b>" + data.hum + " <br>" +
+                "<b>Solar Radiation: </b>" + "0.0" + " <br>" +
+                "<b>PM2.5: </b>" + "26.7 µg/m³" + " <br>" +
+                "<b>CO2: </b>" + "0665" + " <br>" +
+                "<b>VOCs: </b>" + "0.640" + " <br>",
+                {keepInView: "True"}
+            );
+
+
+            map.panTo(new L.LatLng(data.lat + 0.27240141, data.lon + 0.12922093999999));
+            markerx.openPopup();
+
         }
-        function haltSession(boothname) {
-            var r = confirm("Are you sure to stop session on " + boothname + " ?");
-            if (r === true) {
-                urltocall = "/halt/" + boothname;
-                $.ajax({
-                    url: urltocall,
-                    dataType: "text",
-                    method: "GET",
-                    success: function (response) {
-                        console.log(response);
-                        clearTimeout(urlRequestTimeout);
-                        if (response === "Halted") {
-                            chatSocket.send(JSON.stringify({
-                                'message': "halted",
-                                'boothname': boothname,
-                            }));
-                            reflectChanges('#' + boothname, "Halted", "error");
-                        } else {
-                            reflectChanges('#' + boothname, response, "error");
-                        }
+
+    };
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+    if (document.querySelector('#chat-message-input')) {
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+        document.querySelector('#chat-message-submit').onclick = function (e) {
+            var messageInputDom = document.querySelector('#chat-message-input');
+            var message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'boothname': 'Booth1',
+            }));
+            messageInputDom.value = '';
+        };
+    }
+
+    function haltSession(boothname) {
+        var r = confirm("Are you sure to stop session on " + boothname + " ?");
+        if (r === true) {
+            urltocall = "/halt/" + boothname;
+            $.ajax({
+                url: urltocall,
+                dataType: "text",
+                method: "GET",
+                success: function (response) {
+                    console.log(response);
+                    clearTimeout(urlRequestTimeout);
+                    if (response === "Halted") {
+                        chatSocket.send(JSON.stringify({
+                            'message': "halted",
+                            'boothname': boothname,
+                        }));
+                        reflectChanges('#' + boothname, "Halted", "error");
+                    } else {
+                        reflectChanges('#' + boothname, response, "error");
                     }
-                });
-            }
-        }
-        function reflectChanges(BoothName, Message, Type) {
-            console.log(BoothName);
-            if (Type === "success") {
-                $(BoothName + "_image").attr("src", "/static/images/status/success.png");
-            } else {
-                $(BoothName + "_image").attr("src", "/static/images/status/error.png");
-                $(BoothName + '_username').css({"background-color": "red"}).text(Message);
-            }
-        }
-        function DisplayResult() {
-            var r = confirm("Are you sure to end the election? All booths will be disconnected after this action!");
-            if (r === true) {
-                var codeword = prompt("Please enter the code.",);
-                if (codeword === "pulchowk") {
-                    location.href = "/election_result";
                 }
+            });
+        }
+    }
+
+    function reflectChanges(BoothName, Message, Type) {
+        console.log(BoothName);
+        if (Type === "success") {
+            $(BoothName + "_image").attr("src", "/static/images/status/success.png");
+        } else {
+            $(BoothName + "_image").attr("src", "/static/images/status/error.png");
+            $(BoothName + '_username').css({"background-color": "red"}).text(Message);
+        }
+    }
+
+    function DisplayResult() {
+        var r = confirm("Are you sure to end the election? All booths will be disconnected after this action!");
+        if (r === true) {
+            var codeword = prompt("Please enter the code.",);
+            if (codeword === "pulchowk") {
+                location.href = "/election_result";
             }
         }
-    </script>
+    }
+</script>

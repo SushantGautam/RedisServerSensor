@@ -1,12 +1,11 @@
 import json
-
+import binascii
+from ast import literal_eval as make_tuple
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 from webViz.reciever import decrypteddata
-
-
 @xframe_options_exempt
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -21,7 +20,7 @@ class ChatConsumer(WebsocketConsumer):
 
         self.accept()
 
-        async_to_sync(self.channel_layer.group_send)(
+        '''async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
@@ -29,7 +28,7 @@ class ChatConsumer(WebsocketConsumer):
                 'boothname': "boothmaster",
 
             }
-        )
+        ) '''
 
     def disconnect(self, close_code):
         # Leave room group
@@ -41,31 +40,33 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data, ):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        boothname = text_data_json['boothname']
-
-        message = decrypteddata(message)
-        print(message)
-
+        message1 = text_data_json['message']
+        decdata=binascii.unhexlify(message1)
+        decrypt_message = decrypteddata(decdata)
+        data_tuple=make_tuple(decrypt_message.decode())
+        message = data_tuple
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message,
-                'boothname': boothname,
-
+                'message' : message
             }
         )
 
     # Receive message from room group
     def chat_message(self, event):
         message = event['message']
-        boothname = event['boothname']
+        temp = message[0]
+        hum = message[1]
+        lat = message[2]/100
+        lon = message[3]/100
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
-            'temp': message,
-            'hum': boothname,
+            'temp': temp,
+            'hum': hum,
+            'lat': lat,
+            'lon': lon,
             'ifsuccess': 'success',
         }))
