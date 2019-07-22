@@ -1,5 +1,4 @@
 Welcome to  RTEndpoint<br>
-Coded by sushant.info.np <br>
 See console log for details
 
 
@@ -65,7 +64,6 @@ See console log for details
         var message = data['message'];
         var boothname = data['boothname'];
         if (data['ifsuccess'] === 'success') {
-            console.log(data.lat, data.lon);
             console.log(data);
 
 
@@ -75,13 +73,14 @@ See console log for details
             markerx.setLatLng([data.lat + 0.27240141, data.lon + 0.12922093999999]).update();
             markerx.setTooltipContent(
                 "<b>Time: </b>" + new Date("2019-06-26T15:09:00Z") + " <br>" +
-                "<b>Speed: </b>" + "0" + " Km/Hr<br>" +
                 "<b>Temperature(°C): </b>" + data.temp + " <br>" +
-                "<b>Humidity: </b>" + data.hum + " <br>" +
-                "<b>Solar Radiation: </b>" + "0.0" + " <br>" +
-                "<b>PM2.5: </b>" + "26.7 µg/m³" + " <br>" +
-                "<b>CO2: </b>" + "0665" + " <br>" +
-                "<b>VOCs: </b>" + "0.640" + " <br>",
+                "<b>Humidity(RH%): </b>" + data.hum + " <br>" +
+               // "<b>PM2.5: </b>" + data.particulate + " <br>" +
+                "<b>CO(ppm): </b>" + data.co + " <br>" +
+                "<b>LPG(ppm): </b>" + data.lpg + " <br>" +
+                "<b>Smoke(ppm): </b>" + data.smoke + " <br>" +
+                "<b>Pressure(hPa): </b>" + data.pressure + " <br>" +
+                "<b>Altitude(m): </b>" + data.altitude + " <br>",
                 {keepInView: "True"}
             );
 
