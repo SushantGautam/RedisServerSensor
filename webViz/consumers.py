@@ -61,11 +61,11 @@ class ChatConsumer(WebsocketConsumer):
         hum = message[1]
         lat = message[2]/100
         lon = message[3]/100
-        lpg = message[4]
-        co = message[5]
-        smoke = message[6]
-        pressure = message[7]/100
-        altitude = message[8]
+        #lpg = message[4]
+        #co = message[5]
+        #smoke = message[6]
+        #pressure = message[7]/100
+        #altitude = message[8]
         #particulate = message[9]
 
 
@@ -77,11 +77,11 @@ class ChatConsumer(WebsocketConsumer):
             'hum': hum,
             'lat': lat,
             'lon': lon,
-            'lpg': lpg,
-            'co': co,
-            'somke': smoke,
-            'pressure': pressure,
-            'altitude': altitude,
+            #'lpg': lpg,
+            #'co': co,
+            #'somke': smoke,
+            #'pressure': pressure,
+            #'altitude': altitude,
             #'particulate': particulate,
             'ifsuccess': 'success',
         }))
