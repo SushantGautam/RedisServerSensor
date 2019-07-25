@@ -5,7 +5,10 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.views.decorators.clickjacking import xframe_options_exempt
 
+from webViz.models import PySensorData
 from webViz.reciever import decrypteddata
+
+
 @xframe_options_exempt
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -41,16 +44,33 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data, ):
         text_data_json = json.loads(text_data)
         message1 = text_data_json['message']
-        decdata=binascii.unhexlify(message1)
+        decdata = binascii.unhexlify(message1)
         decrypt_message = decrypteddata(decdata)
-        data_tuple=make_tuple(decrypt_message.decode())
+        data_tuple = make_tuple(decrypt_message.decode())
         message = data_tuple
+
+        #
+        # "DateTime"
+        # "Latitude"
+        # "Longitude"
+        # "Temperature_F"
+        # "RelativeHumidity"
+        # "LPG_PPM"
+        # "CO_PPM"
+        # "Smoke_PPM"
+        # "Pressure_hPa"
+        # "Altitude_m"
+        # "PM_25"
+
+        dataObj = PySensorData.objects.using("serveo-server").create(Latitude=message[2] / 100,
+                                                                     Longitude=message[3] / 100,
+                                                                     Temperature_F=message[0]).save()
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message' : message
+                'message': message
             }
         )
 
@@ -59,17 +79,14 @@ class ChatConsumer(WebsocketConsumer):
         message = event['message']
         temp = message[0]
         hum = message[1]
-        lat = message[2]/100
-        lon = message[3]/100
-        #lpg = message[4]
-        #co = message[5]
-        #smoke = message[6]
-        #pressure = message[7]/100
-        #altitude = message[8]
-        #particulate = message[9]
-
-
-
+        lat = message[2] / 100
+        lon = message[3] / 100
+        # lpg = message[4]
+        # co = message[5]
+        # smoke = message[6]
+        # pressure = message[7]/100
+        # altitude = message[8]
+        # particulate = message[9]
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
@@ -77,11 +94,11 @@ class ChatConsumer(WebsocketConsumer):
             'hum': hum,
             'lat': lat,
             'lon': lon,
-            #'lpg': lpg,
-            #'co': co,
-            #'somke': smoke,
-            #'pressure': pressure,
-            #'altitude': altitude,
-            #'particulate': particulate,
+            # 'lpg': lpg,
+            # 'co': co,
+            # 'somke': smoke,
+            # 'pressure': pressure,
+            # 'altitude': altitude,
+            # 'particulate': particulate,
             'ifsuccess': 'success',
         }))

@@ -119,14 +119,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-    'postgres-server': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rm_data_sushant',
-        'USER': 'rmserver_docker_sushant',
-        'PASSWORD': 'rmserver_docker_sushant',
-        'HOST': '210.127.211.112',
-        'PORT': '5432',
-    },
+
     'serveo-server': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rm_data_sushant',
