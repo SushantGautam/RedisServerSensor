@@ -37,17 +37,23 @@ See console log for details
     map.addLayer(tileLayer);
 
 
-    markerx = L.marker([27.68139991, 85.32351494]).bindTooltip(
-        "<b>Time: </b>" + new Date("2019-06-26T15:09:00Z") + " <br>" +
-        "<b>Speed: </b>" + "0" + " Km/Hr<br>" +
-        "<b>Temperature(°C): </b>" + "23.188" + " <br>" +
-        "<b>Humidity: </b>" + "70.0" + " <br>" +
-        "<b>Solar Radiation: </b>" + "0.0" + " <br>" +
-        "<b>PM2.5: </b>" + "26.7 µg/m³" + " <br>" +
-        "<b>CO2: </b>" + "0665" + " <br>" +
-        "<b>VOCs: </b>" + "0.640" + " <br>",
-        {keepInView: "True"}
+
+    markerx = L.marker([{{ lastdata.Latitude }}+0.27240141,{{ lastdata.Longitude }}+ 0.12922093999999]).bindTooltip(
+            "<b>Sensor ID: 01-B <br>" +
+        "<b>Sensor Last Online on:  <br>" +
+        "<b>Time: </b>" + "{{ lastdata.DateTime }}" + " <br> <br>" +
+
+        "<b>Temperature(°C): </b>" + "{{ lastdata.Temperature_F }}" + " <br>" +
+        "<b>Relative Humidity: </b>" + "{{ lastdata.RelativeHumidity }}" + " <br>" +
+        "<b>PM2.5: </b>" + "{{ lastdata.PM_25 }}" + " ug/m3 <br>" +
+        "<b>CO PPM: </b>" + "{{ lastdata.CO_PPM }}" + " <br>" +
+        "<b>LPG PPM: </b>" + "{{ lastdata.LPG_PPM }}" + " <br>"+
+        "<b>Smoke PPM: </b>" + "{{ lastdata.Smoke_PPM }}" + " <br>"+
+        "<b>Pressure: </b>" + "{{ lastdata.Pressure_hPa }}" + " hPa <br>" +
+        "<b>Altitude: </b>" + "{{ lastdata.Altitude_m }}" + " m <br>" ,
+        {keepInView: "True"},
     ).addTo(map);
+
 
     markerx.openTooltip();
 
@@ -72,18 +78,20 @@ See console log for details
 
             markerx.setLatLng([data.lat + 0.27240141, data.lon + 0.12922093999999]).update();
             markerx.setTooltipContent(
-                "<b>Time: </b>" + new Date("2019-06-26T15:09:00Z") + " <br>" +
+                "<b>Sensor ID: 01-B <br>" +
+                 "<b>Sensor Status: Live" +
+                "<b>Time: </b>" + Date().toLocaleString() + " <br>" +
+
                 "<b>Temperature(°C): </b>" + data.temp + " <br>" +
                 "<b>Humidity(RH%): </b>" + data.hum + " <br>" +
-               // "<b>PM2.5(particules/ft^3): </b>" + data.particulate + " <br>" +
-                //"<b>CO(ppm): </b>" + data.co + " <br>" +
-                //"<b>LPG(ppm): </b>" + data.lpg + " <br>" +
-                //"<b>Smoke(ppm): </b>" + data.smoke + " <br>" +
-                //"<b>Pressure(hPa): </b>" + data.pressure + " <br>" +
-                //"<b>Altitude(m): </b>" + data.altitude + " <br>",
+                "<b>PM2.5(particules/ft^3): </b>" + data.particulate + " <br>" +
+               "<b>CO(ppm): </b>" + data.co + " <br>" +
+               "<b>LPG(ppm): </b>" + data.lpg + " <br>" +
+               "<b>Smoke(ppm): </b>" + data.smoke + " <br>" +
+               "<b>Pressure(hPa): </b>" + data.pressure + " <br>" +
+               "<b>Altitude(m): </b>" + data.altitude + " <br>",
                 {keepInView: "True"}
             );
-
 
             map.panTo(new L.LatLng(data.lat + 0.27240141, data.lon + 0.12922093999999));
             markerx.openPopup();
