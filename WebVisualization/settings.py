@@ -53,7 +53,6 @@ INSTALLED_APPS = [
 ]
 
 # REDIS_URL = os.environ['REDIS_URL']
-
 REDIS_URL = "redis://h:pb7db417bc4315578831fd6ee5f9728ef080116d100f144e403535878eb20a914@ec2-3-221-86-226.compute-1.amazonaws.com:9179"
 
 #REDIS_URL = "redis://127.0.0.1:6379"
