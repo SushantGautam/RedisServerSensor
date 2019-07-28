@@ -4,12 +4,12 @@ from django.urls import path
 from webViz.models import PySensorData
 
 
-def HomePage(request):
+def RealTimeMapsView(request, ):
     lastdata = PySensorData.objects.using('serveo-server').last()
-    return render(request, {'lastdata': lastdata, })
+    return render(request, 'homepage.html', {'lastdata' : lastdata, })
 
 
 
 urlpatterns = [
-path('', HomePage),
+path('', RealTimeMapsView),
 ]
