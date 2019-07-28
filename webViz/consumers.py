@@ -64,7 +64,14 @@ class ChatConsumer(WebsocketConsumer):
 
         dataObj = PySensorData.objects.using("serveo-server").create(Latitude=message[2] / 100,
                                                                      Longitude=message[3] / 100,
-                                                                     Temperature_F=message[0]).save()
+                                                                     Temperature_F=message[0],
+                                                                     RelativeHumidity=message[1],
+                                                                     LPG_PPM=message[4],
+                                                                     CO_PPM=message[5],
+                                                                     Smoke_PPM=message[6],
+                                                                     Pressure_hPa=message[7]/100,
+                                                                     Altitude_m=message[8],
+                                                                     PM_25=message[9]).save()
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -79,14 +86,14 @@ class ChatConsumer(WebsocketConsumer):
         message = event['message']
         temp = message[0]
         hum = message[1]
-        lat = message[2] / 100
+        lat = (message[2] / 100)
         lon = message[3] / 100
-        # lpg = message[4]
-        # co = message[5]
-        # smoke = message[6]
-        # pressure = message[7]/100
-        # altitude = message[8]
-        # particulate = message[9]
+        lpg = message[4]
+        co = message[5]
+        smoke = message[6]
+        pressure = message[7]/100
+        altitude = message[8]
+        particulate = message[9]
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
@@ -94,11 +101,11 @@ class ChatConsumer(WebsocketConsumer):
             'hum': hum,
             'lat': lat,
             'lon': lon,
-            # 'lpg': lpg,
-            # 'co': co,
-            # 'somke': smoke,
-            # 'pressure': pressure,
-            # 'altitude': altitude,
-            # 'particulate': particulate,
+            'lpg': lpg,
+            'co': co,
+            'somke': smoke,
+            'pressure': pressure,
+            'altitude': altitude,
+            'particulate': particulate,
             'ifsuccess': 'success',
         }))
