@@ -20,7 +20,6 @@ class ChatConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name,
         )
-
         self.accept()
 
         '''async_to_sync(self.channel_layer.group_send)(
@@ -62,8 +61,8 @@ class ChatConsumer(WebsocketConsumer):
         # "Altitude_m"
         # "PM_25"
 
-        dataObj = PySensorData.objects.using("serveo-server").create(Latitude=message[2] / 100,
-                                                                     Longitude=message[3] / 100,
+        dataObj = PySensorData.objects.using("serveo-server").create(Latitude=message[2] / 100 + 0.27240141,
+                                                                     Longitude=message[3] / 100 + 0.12922093999999,
                                                                      Temperature_F=message[0],
                                                                      RelativeHumidity=message[1],
                                                                      LPG_PPM=message[4],
