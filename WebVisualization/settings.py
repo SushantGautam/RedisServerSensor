@@ -124,8 +124,9 @@ DATABASES = {
         'NAME': 'rm_data_sushant',
         'USER': 'rm_data_sushant',
         'PASSWORD': 'rm_data_sushant',
-        'HOST': 'serveo.net',
-        'PORT': '5433',
+        'HOST': '210.127.211.100',
+        # 'HOST': 'serveo.net',
+        'PORT': '5432',
     }
 }
 # Password validation
