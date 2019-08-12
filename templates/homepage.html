@@ -32,13 +32,13 @@ See console log for details
     });
     var map = L.map('map', {
         zoomControl: true
-    }).setView([{{ lastdata.Latitude }}+0.27240141,{{ lastdata.Longitude }}+ 0.12922093999999], 17);
+    }).setView([{{ lastdata.Latitude }},{{ lastdata.Longitude }}], 17);
 
     map.addLayer(tileLayer);
 
 
 
-    markerx = L.marker([{{ lastdata.Latitude }}+0.27240141,{{ lastdata.Longitude }}+ 0.12922093999999]).bindTooltip(
+    markerx = L.marker([{{ lastdata.Latitude }},{{ lastdata.Longitude }}]).bindTooltip(
             "<b>Sensor ID: 01-B <br>" +
         "<b>Sensor Last Online on:  <br>" +
         "<b>Time: </b>" + "{{ lastdata.DateTime }}" + " <br> <br>" +
