@@ -1,5 +1,5 @@
 dill
-Django==2.2.1
+Django==2.2.18
 
 django-heroku
 coverage
